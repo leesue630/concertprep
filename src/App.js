@@ -14,6 +14,7 @@ class App extends Component {
       duration: null,
       videoId: null,
       sections: null,
+      linesPer: null,
     };
     this.setDuration = this.setDuration.bind(this);
     this.setVideoId = this.setVideoId.bind(this);
@@ -41,15 +42,17 @@ class App extends Component {
     });
   }
 
-  setSections(sections) {
+  setSections(sections, linesPer) {
     this.setState({
       sections: sections,
+      linesPer: linesPer,
     });
   }
 
   resetSections() {
     this.setState({
       sections: null,
+      linesPer: null,
     });
   }
 
@@ -65,6 +68,7 @@ class App extends Component {
                     videoId={this.state.videoId}
                     duration={this.state.duration}
                     sections={this.state.sections}
+                    linesPer={this.state.linesPer}
                     resetVideoId={this.resetVideoId}
                     resetSections={this.resetSections}
                   />

@@ -24,6 +24,10 @@
   margin: 20px;
 }
 
+.verse {
+  border: 1px solid lightblue;
+}
+
 .instructions {
   padding: 10px;
   text-align: left;

@@ -78,7 +78,7 @@ class SetSections extends Component {
 
   handleLinesPer(e) {
     this.setState({
-      linesPer: e.target.value,
+      linesPer: +e.target.value,
     });
   }
 
@@ -164,9 +164,9 @@ class SetSections extends Component {
     let keys = Object.keys(json[0]).filter(
       (key) => options.ignoreKeys.indexOf(key) === -1
     );
-    let linesPer = [];
+    let lines = [];
     if (options.includeHeader) {
-      linesPer.push(keys.join(options.delimiter));
+      lines.push(keys.join(options.delimiter));
     }
     let times = json.map((entry) => {
       var a = entry.start.split(":"); // split it at the colons
@@ -176,37 +176,64 @@ class SetSections extends Component {
       return seconds;
     });
     times[times.length] = this.props.duration;
-    times.sort(function(a, b) {
+    times.sort(function (a, b) {
       return a - b;
     });
     this.setState({
       times: times,
-      includesZero: times[0] !== 0
+      includesZero: times[0] !== 0,
     });
-    return linesPer.concat(
+    return lines.concat(
       json.map((entry) => keys.map((key) => entry[key]).join(options.delimiter))
     );
   }
 
+  lyricToP(lyric, i) {
+    let spacedI =
+      i + 1 < 10 ? i + 1 + ":\xa0\xa0\xa0\xa0\xa0" : i + 1 + ":\xa0\xa0\xa0";
+    return (
+      <p className="lyric" key={"lyric" + i}>
+        {spacedI}
+        {lyric}
+      </p>
+    );
+  }
+
   render() {
+    let splits;
+    if (this.state.linesPer > 0) {
+      splits = this.state.lyrics
+        .map((line, i) => i)
+        .filter((i) => !(i % this.state.linesPer));
+    } else {
+      splits = [0];
+    }
+    console.log("splits", splits);
+
+    let verses = [];
+    for (let i = 0; i < splits.length; i++) {
+      let bound =
+        i === splits.length - 1 ? this.state.lyrics.length : splits[i + 1];
+      // console.log("bound", bound);
+      let verse = [];
+      for (let j = splits[i]; j < bound; j++) {
+        verse.push(this.lyricToP(this.state.lyrics[j], j));
+      }
+      // console.log("verse", verse);
+      verses.push(
+        <div className="verse" key={"verse" + i}>
+          {verse}
+        </div>
+      );
+    }
+    console.log("verses", verses);
 
     return (
       <div>
         {this.state.loaded ? (
           <div>
             Lyrics:
-            {this.state.lyrics.map((line, i) => {
-              let spacedI =
-                i + 1 < 10
-                  ? i + 1 + ":\xa0\xa0\xa0\xa0\xa0"
-                  : i + 1 + ":\xa0\xa0\xa0";
-              return (
-                <p className="lyric" key={i}>
-                  {spacedI}
-                  {line}
-                </p>
-              );
-            })}
+            {verses}
             <br />
             Total Line Count: {this.state.lyrics.length}
           </div>
@@ -234,8 +261,8 @@ class SetSections extends Component {
           onClick={this.handleNext}
           disabled={
             !this.state.loaded ||
-            +this.state.linesPer <= 0 ||
-            +this.state.linesPer > this.state.lyrics.length
+            this.state.linesPer <= 0 ||
+            this.state.linesPer > this.state.lyrics.length
           }
         >
           Memorize!

@@ -113,7 +113,7 @@ class SetVideoId extends Component {
           </div>
         )}
         <div>
-          Video ID:{" "}
+          www.youtube.com/watch?v={" "}
           <TextField
             id="videoid"
             name="videoid"
