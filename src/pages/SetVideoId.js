@@ -150,7 +150,8 @@ class SetVideoId extends Component {
         </div>
         <p>
           This tool splits YouTube videos into looped sections by lyrics. Use it
-          to help you memorize songs before your next concert!
+          to help you memorize songs before your next concert (whether it's
+          virtual, or in person, haha)!
         </p>
         <div className="instructions">
           <b>Instructions:</b>

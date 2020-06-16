@@ -60,17 +60,25 @@ class SetSections extends Component {
 
   // https://stackoverflow.com/questions/32142656/get-youtube-captions
   componentDidMount() {
+    this.setState({
+      error: null,
+    });
     this.loadYouTubeSubtitles(this.props.videoId, {
-      callbackFn: (json) => {
+      onSuccess: (json) => {
         const lyrics = this.jsonToCsv(json, {
           includeHeader: false,
           ignoreKeys: ["start", "dur"],
           delimiter: "\t",
         });
-        // console.log(json);
         this.setState({
           loaded: true,
           lyrics: lyrics,
+        });
+      },
+      onError: () => {
+        this.setState({
+          error:
+            "Something went wrong :( Make sure the video has human-generated captions.",
         });
       },
     });
@@ -87,9 +95,8 @@ class SetSections extends Component {
       {
         baseUrl: "https://video.google.com/timedtext",
         languageId: "en",
-        callbackFn: function (json) {
-          // console.log(json);
-        }, // Default
+        onSuccess: function (json) {}, // Default
+        onError: function () {}, // Default
       },
       options || {}
     );
@@ -140,15 +147,14 @@ class SetSections extends Component {
     );
     xhr.responseType = "document";
     xhr.onload = function () {
-      if (this.status >= 200 && this.status < 400) {
-        options.callbackFn(parseTranscriptAsJSON(this.response));
+      console.log(this.status);
+      if (this.response) {
+        options.onSuccess(parseTranscriptAsJSON(this.response));
       } else {
-        // console.log("Error: " + this.status);
+        options.onError();
       }
     };
-    xhr.onerror = function () {
-      // console.log("Error!");
-    };
+    xhr.onerror = options.onError;
     xhr.send();
   }
 
@@ -208,7 +214,7 @@ class SetSections extends Component {
     } else {
       splits = [0];
     }
-    console.log("splits", splits);
+    // console.log("splits", splits);
 
     let verses = [];
     for (let i = 0; i < splits.length; i++) {
@@ -226,7 +232,7 @@ class SetSections extends Component {
         </div>
       );
     }
-    console.log("verses", verses);
+    // console.log("verses", verses);
 
     return (
       <div>
@@ -236,37 +242,37 @@ class SetSections extends Component {
             {verses}
             <br />
             Total Line Count: {this.state.lyrics.length}
+            <br />
+            Lines per section{" "}
+            <TextField
+              id="linesPer"
+              name="linesPer"
+              type="number"
+              defaultValue={this.state.linesPer}
+              onChange={this.handleLinesPer}
+            />
+            <br />
+            Include Song Beginning
+            <Checkbox
+              checked={this.state.includeBeginning}
+              onChange={this.handleToggleIncludeBeginning}
+              inputProps={{ "aria-label": "primary checkbox" }}
+            />
+            <br />
+            <button
+              onClick={this.handleNext}
+              disabled={
+                !this.state.loaded ||
+                this.state.linesPer <= 0 ||
+                this.state.linesPer > this.state.lyrics.length
+              }
+            >
+              Memorize!
+            </button>
           </div>
         ) : (
-          "Loading lyrics..."
+          this.state.error || "Loading lyrics..."
         )}
-        <br />
-        Lines per section{" "}
-        <TextField
-          id="linesPer"
-          name="linesPer"
-          type="number"
-          defaultValue={this.state.linesPer}
-          onChange={this.handleLinesPer}
-        />
-        <br />
-        Include Song Beginning
-        <Checkbox
-          checked={this.state.includeBeginning}
-          onChange={this.handleToggleIncludeBeginning}
-          inputProps={{ "aria-label": "primary checkbox" }}
-        />
-        <br />
-        <button
-          onClick={this.handleNext}
-          disabled={
-            !this.state.loaded ||
-            this.state.linesPer <= 0 ||
-            this.state.linesPer > this.state.lyrics.length
-          }
-        >
-          Memorize!
-        </button>
         <br />
         <button onClick={this.props.resetVideoId}>
           Choose different video
