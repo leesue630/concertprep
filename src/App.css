@@ -10,13 +10,13 @@
 }
 
 .YTPlaceHolder {
+  padding: 160px 0px 0px;
   text-align: center;
   color: white;
   display: inline-block;
-  height: 390px;
+  height: 230px;
   width: 640px;
-  line-height: 309px;
-  background-color: gray;
+  background-color: #535353;
   margin-bottom: 20px;
 }
 

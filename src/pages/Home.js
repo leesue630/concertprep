@@ -52,7 +52,7 @@ class Home extends Component {
       end: end,
       section: i,
     });
-    console.log("Prev section");
+    // console.log("Prev section");
   }
 
   handleNextSection() {
@@ -69,7 +69,7 @@ class Home extends Component {
       end: end,
       section: i,
     });
-    console.log("Next section");
+    // console.log("Next section");
   }
 
   _onReady(e) {
@@ -108,9 +108,9 @@ class Home extends Component {
           onStateChange={this._onStateChange}
         />
         <p>
-          Section: {this.state.section + 1}/{this.state.sectionCount}
+          <b>Section: </b>{this.state.section + 1}/{this.state.sectionCount}
           <br />
-          Interval: [{this.secToTimestamp(this.state.start)} - {this.secToTimestamp(this.state.end)}]
+          <b>Interval: </b>[{this.secToTimestamp(this.state.start)} - {this.secToTimestamp(this.state.end)}]
           <br />
         </p>
         <button

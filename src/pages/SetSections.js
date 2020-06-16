@@ -67,7 +67,7 @@ class SetSections extends Component {
           ignoreKeys: ["start", "dur"],
           delimiter: "\t",
         });
-        console.log(json);
+        // console.log(json);
         this.setState({
           loaded: true,
           lyrics: lyrics,
@@ -88,7 +88,7 @@ class SetSections extends Component {
         baseUrl: "https://video.google.com/timedtext",
         languageId: "en",
         callbackFn: function (json) {
-          console.log(json);
+          // console.log(json);
         }, // Default
       },
       options || {}
@@ -143,11 +143,11 @@ class SetSections extends Component {
       if (this.status >= 200 && this.status < 400) {
         options.callbackFn(parseTranscriptAsJSON(this.response));
       } else {
-        console.log("Error: " + this.status);
+        // console.log("Error: " + this.status);
       }
     };
     xhr.onerror = function () {
-      console.log("Error!");
+      // console.log("Error!");
     };
     xhr.send();
   }
@@ -176,7 +176,9 @@ class SetSections extends Component {
       return seconds;
     });
     times[times.length] = this.props.duration;
-    times.sort();
+    times.sort(function(a, b) {
+      return a - b;
+    });
     this.setState({
       times: times,
       includesZero: times[0] !== 0
@@ -187,6 +189,7 @@ class SetSections extends Component {
   }
 
   render() {
+
     return (
       <div>
         {this.state.loaded ? (

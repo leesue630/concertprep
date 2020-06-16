@@ -69,7 +69,7 @@ class SetVideoId extends Component {
   }
 
   _onError(e) {
-    console.log(e.data);
+    // console.log(e.data);
     this.setState({
       loading: false,
     });
@@ -96,7 +96,9 @@ class SetVideoId extends Component {
 
     return (
       <div className="centered">
-        <h2><b>YouTube Concert Prep Tool</b></h2>
+        <h2>
+          <b>YouTube Concert Prep Tool</b>
+        </h2>
         {this.state.preview ? (
           <YouTube
             videoId={this.state.videoId}
@@ -105,7 +107,10 @@ class SetVideoId extends Component {
             onError={this._onError}
           />
         ) : (
-          <div className="YTPlaceHolder">Video preview will appear here</div>
+          <div className="YTPlaceHolder">
+            Video preview will appear here <br />
+            (default: Yummy - Justin Bieber)
+          </div>
         )}
         <div>
           Video ID:{" "}
@@ -118,7 +123,8 @@ class SetVideoId extends Component {
             defaultValue={this.state.videoIdTemp}
             onChange={this.handleVideoId}
           />
-          {"\xa0\xa0\xa0"}<button onClick={this.handlePreview} disabled={this.state.loading}>
+          {"\xa0\xa0\xa0"}
+          <button onClick={this.handlePreview} disabled={this.state.loading}>
             Preview
           </button>
           <br />
