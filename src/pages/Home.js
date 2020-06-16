@@ -83,6 +83,10 @@ class Home extends Component {
     }
   }
 
+  secToTimestamp(s) {
+    return new Date(s * 1000).toISOString().substr(11, 8);
+  }
+
   render() {
     const opts = {
       height: "390",
@@ -106,9 +110,8 @@ class Home extends Component {
         <p>
           Section: {this.state.section + 1}/{this.state.sectionCount}
           <br />
-          Start Time: {this.state.start}
+          Interval: [{this.secToTimestamp(this.state.start)} - {this.secToTimestamp(this.state.end)}]
           <br />
-          End Time: {this.state.end}
         </p>
         <button
           onClick={this.handlePrevSection}

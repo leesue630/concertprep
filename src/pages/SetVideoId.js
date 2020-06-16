@@ -96,6 +96,7 @@ class SetVideoId extends Component {
 
     return (
       <div className="centered">
+        <h2><b>YouTube Concert Prep Tool</b></h2>
         {this.state.preview ? (
           <YouTube
             videoId={this.state.videoId}
@@ -104,10 +105,10 @@ class SetVideoId extends Component {
             onError={this._onError}
           />
         ) : (
-            <div className="YTPlaceHolder">Video preview will appear here</div>
+          <div className="YTPlaceHolder">Video preview will appear here</div>
         )}
         <div>
-          Video ID{" "}
+          Video ID:{" "}
           <TextField
             id="videoid"
             name="videoid"
@@ -117,13 +118,23 @@ class SetVideoId extends Component {
             defaultValue={this.state.videoIdTemp}
             onChange={this.handleVideoId}
           />
-          <button onClick={this.handlePreview} disabled={this.state.loading}>
+          {"\xa0\xa0\xa0"}<button onClick={this.handlePreview} disabled={this.state.loading}>
             Preview
           </button>
+          <br />
           <br />
           <button onClick={this.handleNext} disabled={!this.state.sync}>
             Next
           </button>
+        </div>
+        <br />
+        <div className="instructions">
+          <b>Instructions:</b>
+          <br />
+          1. Find a YouTube video with closed captions
+          <br />
+          2. Enter the Video ID above (e.g. https://www.youtube.com/watch?v=
+          <u>8EJ3zbKTWQ8</u>)
         </div>
       </div>
     );

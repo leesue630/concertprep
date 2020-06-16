@@ -2,19 +2,6 @@ import React, { Component } from "react";
 import TextField from "@material-ui/core/TextField";
 import Checkbox from "@material-ui/core/Checkbox";
 
-// main functions to use: onStateChange
-// seekTo(seconds, allowSeekAhead)
-// playVideo()
-// getDuration()
-/*
--1 – unstarted
-0 – ended
-1 – playing
-2 – paused
-3 – buffering
-5 – video cued
-*/
-
 class SetSections extends Component {
   constructor(props) {
     super(props);
@@ -189,6 +176,7 @@ class SetSections extends Component {
       return seconds;
     });
     times[times.length] = this.props.duration;
+    times.sort();
     this.setState({
       times: times,
       includesZero: times[0] !== 0

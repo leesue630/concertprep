@@ -11,12 +11,21 @@
 
 .YTPlaceHolder {
   text-align: center;
+  color: white;
   display: inline-block;
   height: 390px;
   width: 640px;
+  line-height: 309px;
   background-color: gray;
+  margin-bottom: 20px;
 }
 
 .container {
   margin: 20px;
+}
+
+.instructions {
+  padding: 10px;
+  text-align: left;
+  background-color: lightgray;
 }

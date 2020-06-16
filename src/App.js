@@ -37,6 +37,7 @@ class App extends Component {
   resetVideoId() {
     this.setState({
       videoId: null,
+      sections: null,
     });
   }
 
