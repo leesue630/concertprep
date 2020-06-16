@@ -108,12 +108,14 @@ class Home extends Component {
           onStateChange={this._onStateChange}
         />
         <p>
-          <b>Lines Per: </b>{this.props.linesPer}
-          <br />
-          <h3><b>Section: </b>{this.state.section + 1}/{this.state.sectionCount}</h3>
-          <br />
-          <b>Interval: </b>[{this.secToTimestamp(this.state.start)} - {this.secToTimestamp(this.state.end)}]
-          <br />
+          <b>Lines Per: </b>
+          {this.props.linesPer}
+          <h3>
+            <b>Section: </b>
+            {this.state.section + 1}/{this.state.sectionCount}
+          </h3>
+          <b>Interval: </b>[{this.secToTimestamp(this.state.start)} -{" "}
+          {this.secToTimestamp(this.state.end)}]
         </p>
         <button
           onClick={this.handlePrevSection}

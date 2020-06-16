@@ -2,6 +2,9 @@ import YouTube from "react-youtube";
 import React, { Component } from "react";
 import TextField from "@material-ui/core/TextField";
 
+const YT_SEARCH_URL =
+  "https://www.youtube.com/results?search_query=music&sp=EgIoAQ%253D%253D";
+
 class SetVideoId extends Component {
   constructor(props) {
     super(props);
@@ -17,7 +20,8 @@ class SetVideoId extends Component {
     this.handleVideoId = this.handleVideoId.bind(this);
     this.handlePreview = this.handlePreview.bind(this);
     this.handleNext = this.handleNext.bind(this);
-    this._onReady = this._onReady.bind(this);
+    // this._onReady = this._onReady.bind(this);
+    this._onStateChange = this._onStateChange.bind(this);
     this._onError = this._onError.bind(this);
   }
 
@@ -60,12 +64,24 @@ class SetVideoId extends Component {
     }
   }
 
-  _onReady(e) {
-    this.setState({
-      duration: e.target.getDuration(),
-      loading: false,
-      sync: true,
-    });
+  // _onReady(e) {
+  //   console.log("onReady");
+  //   this.setState({
+  //     duration: e.target.getDuration(),
+  //     loading: false,
+  //     sync: true,
+  //   });
+  // }
+
+  _onStateChange(e) {
+    // console.log(e.data);
+    if (this.state.loading) {
+      this.setState({
+        duration: e.target.getDuration(),
+        loading: false,
+        sync: true,
+      });
+    }
   }
 
   _onError(e) {
@@ -90,12 +106,11 @@ class SetVideoId extends Component {
       width: "640",
       playerVars: {
         autoplay: 1,
-        origin: "http://localhost:3000/",
       },
     };
 
     return (
-      <div className="centered">
+      <div>
         <h2>
           <b>YouTube Concert Prep Tool</b>
         </h2>
@@ -103,7 +118,8 @@ class SetVideoId extends Component {
           <YouTube
             videoId={this.state.videoId}
             opts={opts}
-            onReady={this._onReady}
+            // onReady={this._onReady}
+            onStateChange={this._onStateChange}
             onError={this._onError}
           />
         ) : (
@@ -128,19 +144,29 @@ class SetVideoId extends Component {
             Preview
           </button>
           <br />
-          <br />
           <button onClick={this.handleNext} disabled={!this.state.sync}>
             Next
           </button>
         </div>
-        <br />
+        <p>
+          This tool splits YouTube videos into looped sections by lyrics. Use it
+          to help you memorize songs before your next concert!
+        </p>
         <div className="instructions">
           <b>Instructions:</b>
           <br />
-          1. Find a YouTube video with closed captions
+          1.{" "}
+          <a href={YT_SEARCH_URL} target="_blank">
+            Find a YouTube video with closed captions
+          </a>
           <br />
-          2. Enter the Video ID above (e.g. https://www.youtube.com/watch?v=
+          2. Paste the 11-character Video ID above (e.g.
+          https://www.youtube.com/watch?v=
           <u>8EJ3zbKTWQ8</u>)
+          <br />
+          3. Preview the video
+          <br />
+          4. Press "Next" to begin sectioning the video
         </div>
       </div>
     );

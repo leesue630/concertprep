@@ -33,3 +33,7 @@
   text-align: left;
   background-color: lightgray;
 }
+
+button {
+  margin: 5px;
+}

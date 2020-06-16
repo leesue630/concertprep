@@ -55,7 +55,7 @@ class SetSections extends Component {
     if (this.state.times.length - (1 % this.state.linesPer) !== 0) {
       sections[sections.length] = this.state.times[this.state.times.length - 1];
     }
-    this.props.setSections(sections);
+    this.props.setSections(sections, this.state.linesPer);
   }
 
   // https://stackoverflow.com/questions/32142656/get-youtube-captions
