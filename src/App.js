@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Redirect } from "react-router-dom";
 
-import "./App.css";
 import Home from "./pages/Home";
 import SetSections from "./pages/SetSections";
 import SetVideoId from "./pages/SetVideoId";

@@ -7,7 +7,51 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.App {
+  text-align: center;
+}
+
+.lyric {
+  text-align: left;
+  font-size: 10px;
+  margin: 0px;
+  padding: 0px;
+}
+
+.YTPlaceHolder {
+  padding: 160px 0px 0px;
+  text-align: center;
+  color: white;
+  display: inline-block;
+  height: 230px;
+  width: 640px;
+  background-color: #535353;
+  margin-bottom: 20px;
+}
+
+.container {
+  margin: 20px;
+}
+
+.verse {
+  border: 1px solid lightblue;
+}
+
+.instructions {
+  padding: 10px;
+  text-align: left;
+  background-color: lightgray;
+}
+
+button {
+  margin: 5px;
+}
+
+#lyrics-header {
+  text-align: left;
+  margin: 0px 0px 10px 10px;
+}
+
+.small {
+  width: 40px;
 }

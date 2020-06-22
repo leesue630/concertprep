@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import TextField from "@material-ui/core/TextField";
 import Checkbox from "@material-ui/core/Checkbox";
+import captions from "../captions";
 
 class SetSections extends Component {
   constructor(props) {
@@ -19,8 +20,7 @@ class SetSections extends Component {
     this.handleToggleIncludeBeginning = this.handleToggleIncludeBeginning.bind(
       this
     );
-    this.loadYouTubeSubtitles = this.loadYouTubeSubtitles.bind(this);
-    this.jsonToCsv = this.jsonToCsv.bind(this);
+    this.parseJson = this.parseJson.bind(this);
   }
 
   handleToggleIncludeBeginning(e) {
@@ -58,14 +58,13 @@ class SetSections extends Component {
     this.props.setSections(sections, this.state.linesPer);
   }
 
-  // https://stackoverflow.com/questions/32142656/get-youtube-captions
   componentDidMount() {
     this.setState({
       error: null,
     });
-    this.loadYouTubeSubtitles(this.props.videoId, {
+    captions.loadYouTubeSubtitles(this.props.videoId, {
       onSuccess: (json) => {
-        const lyrics = this.jsonToCsv(json, {
+        const lyrics = this.parseJson(json, {
           includeHeader: false,
           ignoreKeys: ["start", "dur"],
           delimiter: "\t",
@@ -90,75 +89,8 @@ class SetSections extends Component {
     });
   }
 
-  loadYouTubeSubtitles(videoId, options) {
-    options = Object.assign(
-      {
-        baseUrl: "https://video.google.com/timedtext",
-        languageId: "en",
-        onSuccess: function (json) {}, // Default
-        onError: function () {}, // Default
-      },
-      options || {}
-    );
-
-    // https://stackoverflow.com/a/9609450/1762224
-    var decodeHTML = (function () {
-      let el = document.createElement("div");
-      function __decode(str) {
-        if (str && typeof str === "string") {
-          str = str
-            .replace("/<script[^>]*>([Ss]*?)</script>/gmi", "")
-            .replace("/</?w(?:[^\"'>]|\"[^\"]*\"|'[^']*')*>/gmi", "");
-          el.innerHTML = str;
-          str = el.textContent;
-          el.textContent = "";
-        }
-        return str;
-      }
-      removeElement(el); // Clean-up
-      return __decode;
-    })();
-
-    function removeElement(el) {
-      el && el.parentNode && el.parentNode.removeChild(el);
-    }
-
-    function parseTranscriptAsJSON(xml) {
-      return [].slice
-        .call(xml.querySelectorAll("transcript text"))
-        .map((text) => ({
-          start: formatTime(Math.floor(text.getAttribute("start"))),
-          dur: formatTime(Math.floor(text.getAttribute("dur"))),
-          text: decodeHTML(text.textContent).replace("/s+/g", " "),
-        }));
-    }
-
-    function formatTime(seconds) {
-      let date = new Date(null);
-      date.setSeconds(seconds);
-      return date.toISOString().substr(11, 8);
-    }
-
-    let xhr = new XMLHttpRequest();
-    xhr.open(
-      "POST",
-      `${options.baseUrl}?lang=${options.languageId}&v=${videoId}`,
-      true
-    );
-    xhr.responseType = "document";
-    xhr.onload = function () {
-      console.log(this.status);
-      if (this.response) {
-        options.onSuccess(parseTranscriptAsJSON(this.response));
-      } else {
-        options.onError();
-      }
-    };
-    xhr.onerror = options.onError;
-    xhr.send();
-  }
-
-  jsonToCsv(json, options) {
+  parseJson(json, options) {
+    // default options
     options = Object.assign(
       {
         includeHeader: true,
@@ -167,9 +99,12 @@ class SetSections extends Component {
       },
       options || {}
     );
+
+    // ignore keys specified in options
     let keys = Object.keys(json[0]).filter(
       (key) => options.ignoreKeys.indexOf(key) === -1
     );
+
     let lines = [];
     if (options.includeHeader) {
       lines.push(keys.join(options.delimiter));
@@ -238,19 +173,19 @@ class SetSections extends Component {
       <div>
         {this.state.loaded ? (
           <div>
-            Lyrics:
-            {verses}
-            <br />
             Total Line Count: {this.state.lyrics.length}
             <br />
-            Lines per section{" "}
+            Lines per section:{" "}
             <TextField
               id="linesPer"
               name="linesPer"
               type="number"
               defaultValue={this.state.linesPer}
               onChange={this.handleLinesPer}
+              className="small"
             />
+            <h2 id="lyrics-header">Lyrics:</h2>
+            {verses}
             <br />
             Include Song Beginning
             <Checkbox
