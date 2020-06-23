@@ -8,6 +8,6 @@ Concert Prep takes any YouTube video ID and gets timestamped captions for the vi
 YouTube caption retrieval courtesy of: https://stackoverflow.com/questions/32142656/get-youtube-captions
 Uses YouTube Player React component (https://www.npmjs.com/package/react-youtube)
 
-Built with React.
+Built with React, HTML, CSS, JavaScript.
 
 Netlify Link: http://concertprep.netlify.app
