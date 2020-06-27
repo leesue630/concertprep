@@ -107,16 +107,15 @@ class Home extends Component {
           onReady={this._onReady}
           onStateChange={this._onStateChange}
         />
-        <p>
-          <b>Lines Per: </b>
-          {this.props.linesPer}
-          <h3>
-            <b>Section: </b>
-            {this.state.section + 1}/{this.state.sectionCount}
-          </h3>
-          <b>Interval: </b>[{this.secToTimestamp(this.state.start)} -{" "}
-          {this.secToTimestamp(this.state.end)}]
-        </p>
+        <b>Lines Per: </b>
+        {this.props.linesPer}
+        <h3>
+          <b>Section: </b>
+          {this.state.section + 1}/{this.state.sectionCount}
+        </h3>
+        <b>Interval: </b>[{this.secToTimestamp(this.state.start)} -{" "}
+        {this.secToTimestamp(this.state.end)}]
+        <br />
         <button
           onClick={this.handlePrevSection}
           disabled={this.state.section <= 0}

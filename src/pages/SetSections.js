@@ -26,23 +26,21 @@ class SetSections extends Component {
   handleToggleIncludeBeginning(e) {
     let checked = e.target.checked;
     if (this.state.includeBeginning !== checked) {
-      if (this.state.includesZero) {
-        if (checked) {
-          let newTimes = this.state.times.slice(0);
-          // insert time 0 at beginning of list
-          newTimes.splice(0, 0, 0);
-          this.setState({
-            includeBeginning: true,
-            times: newTimes,
-          });
-        } else {
-          let newTimes = this.state.times.slice(0);
-          newTimes.shift();
-          this.setState({
-            includeBeginning: false,
-            times: newTimes,
-          });
-        }
+      if (checked) {
+        let newTimes = this.state.times.slice(0);
+        // insert time 0 at beginning of list
+        newTimes.splice(0, 0, 0);
+        this.setState({
+          includeBeginning: true,
+          times: newTimes,
+        });
+      } else {
+        let newTimes = this.state.times.slice(0);
+        newTimes.shift();
+        this.setState({
+          includeBeginning: false,
+          times: newTimes,
+        });
       }
     }
   }
@@ -122,7 +120,7 @@ class SetSections extends Component {
     });
     this.setState({
       times: times,
-      includesZero: times[0] !== 0,
+      includesZero: times[0] === 0,
     });
     return lines.concat(
       json.map((entry) => keys.map((key) => entry[key]).join(options.delimiter))
@@ -187,12 +185,16 @@ class SetSections extends Component {
             <h2 id="lyrics-header">Lyrics:</h2>
             {verses}
             <br />
-            Include Song Beginning
-            <Checkbox
-              checked={this.state.includeBeginning}
-              onChange={this.handleToggleIncludeBeginning}
-              inputProps={{ "aria-label": "primary checkbox" }}
-            />
+            {!this.state.includesZero && (
+              <span>
+                Include Song Beginning
+                <Checkbox
+                  checked={this.state.includeBeginning}
+                  onChange={this.handleToggleIncludeBeginning}
+                  inputProps={{ "aria-label": "primary checkbox" }}
+                />
+              </span>
+            )}
             <br />
             <button
               onClick={this.handleNext}
