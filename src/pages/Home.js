@@ -27,6 +27,15 @@ class Home extends Component {
     this.handlePrevSection = this.handlePrevSection.bind(this);
     this.handleNextSection = this.handleNextSection.bind(this);
     this._onStateChange = this._onStateChange.bind(this);
+    this.keyDownHandler = this.keyDownHandler.bind(this);
+  }
+
+  keyDownHandler ({ key }) {
+    if (key === 'a' && this.state.section > 0) {
+      this.handlePrevSection();
+    } else if (key === 'd' && this.state.section + 1 < this.state.sectionCount) {
+      this.handleNextSection();
+    }
   }
 
   componentDidMount() {
@@ -36,6 +45,11 @@ class Home extends Component {
         end: this.props.sections[1],
       });
     }
+    window.addEventListener("keydown", this.keyDownHandler, true);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("keydown", this.keyDownHandler, true);
   }
 
   handlePrevSection() {
@@ -120,13 +134,13 @@ class Home extends Component {
           onClick={this.handlePrevSection}
           disabled={this.state.section <= 0}
         >
-          Prev Section
+          Prev Section (A)
         </button>
         <button
           onClick={this.handleNextSection}
           disabled={this.state.section + 1 >= this.state.sectionCount}
         >
-          Next Section
+          Next Section (D)
         </button>
         <br />
         <button onClick={this.props.resetVideoId}>

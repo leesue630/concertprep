@@ -50,7 +50,7 @@ class SetSections extends Component {
     let sections = this.state.times.filter(
       (v, i) => i % this.state.linesPer === 0
     );
-    if (this.state.times.length - (1 % this.state.linesPer) !== 0) {
+    if (((this.state.times.length - 1) % this.state.linesPer) !== 0) {
       sections[sections.length] = this.state.times[this.state.times.length - 1];
     }
     this.props.setSections(sections, this.state.linesPer);
@@ -62,11 +62,8 @@ class SetSections extends Component {
     });
     captions.loadYouTubeSubtitles(this.props.videoId, {
       onSuccess: (json) => {
-        const lyrics = this.parseJson(json, {
-          includeHeader: false,
-          ignoreKeys: ["start", "dur"],
-          delimiter: "\t",
-        });
+        const lyrics = this.parseJson(json);
+        // console.log("lyrics", lyrics);
         this.setState({
           loaded: true,
           lyrics: lyrics,
@@ -87,44 +84,29 @@ class SetSections extends Component {
     });
   }
 
-  parseJson(json, options) {
-    // default options
-    options = Object.assign(
-      {
-        includeHeader: true,
-        delimiter: ",",
-        ignoreKeys: [],
-      },
-      options || {}
-    );
+  parseJson(json) {
+    // sort lyrics by start key
+    json = json.sort(function (a, b) {
+      return a.start - b.start;
+    });
 
-    // ignore keys specified in options
-    let keys = Object.keys(json[0]).filter(
-      (key) => options.ignoreKeys.indexOf(key) === -1
-    );
-
-    let lines = [];
-    if (options.includeHeader) {
-      lines.push(keys.join(options.delimiter));
-    }
+    // extract times from captions
     let times = json.map((entry) => {
-      var a = entry.start.split(":"); // split it at the colons
-
-      // minutes are worth 60 seconds. Hours are worth 60 minutes.
+      // convert HH:MM:SS to seconds
+      var a = entry.start.split(":");
       var seconds = +a[0] * 60 * 60 + +a[1] * 60 + +a[2];
       return seconds;
     });
+
+    // add final timestamp to times
     times[times.length] = this.props.duration;
-    times.sort(function (a, b) {
-      return a - b;
-    });
+
     this.setState({
       times: times,
       includesZero: times[0] === 0,
     });
-    return lines.concat(
-      json.map((entry) => keys.map((key) => entry[key]).join(options.delimiter))
-    );
+
+    return json.map((entry) => entry.text.replace("\n", ", "));
   }
 
   lyricToP(lyric, i) {

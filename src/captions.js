@@ -5,7 +5,7 @@ exports.loadYouTubeSubtitles = (videoId, options) => {
     {
       baseUrl: "https://video.google.com/timedtext",
       languageId: "en",
-      onSuccess: function (json) {}, // Default
+      onSuccess: function () {}, // Default
       onError: function () {}, // Default
     },
     options || {}
